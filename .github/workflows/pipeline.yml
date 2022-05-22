@@ -1,0 +1,20 @@
+name: Dataset Pull Automation
+
+on:
+  workflow_dispatch
+
+jobs:
+  Pull datasets:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out OD bods toolset repo
+      uses: actions/checkout@v3
+      with: 
+        repository: 'OpenDataScotland/the_od_bods'
+    - name: Check out JKAN repo
+      uses: actions/checkout@v3
+      with: 
+        repository: 'OpenDataScotland/jkan'
+    - name: Check files
+      runs: ls -l -a
