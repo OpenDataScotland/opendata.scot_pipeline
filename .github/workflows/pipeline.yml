@@ -17,4 +17,4 @@ jobs:
       with: 
         repository: 'OpenDataScotland/jkan'
     - name: Check files
-      runs: ls -l -a
+      run: ls -l -a
