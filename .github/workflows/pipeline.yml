@@ -85,3 +85,4 @@ jobs:
       working-directory: ${{env.jkanPath}}
     - name: Commit and push
       run: git add -A && git commit -m "Dataset Sync" && git push origin gh-pages
+      working-directory: ${{env.jkanPath}}
