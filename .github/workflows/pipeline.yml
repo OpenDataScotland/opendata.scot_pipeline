@@ -6,8 +6,10 @@ on:
 jobs:
   Pull_datasets:
     runs-on: ubuntu-latest
-
+    env: 
+      
     steps:
+    # Init repos
     - name: Check out OD bods toolset repo
       uses: actions/checkout@v3
       with: 
@@ -20,3 +22,57 @@ jobs:
         path: 'jkan'
     - name: Check files
       run: ls -l -a
+
+
+   # Set up programming toolsets
+   - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+          python-version: '3.9'
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    
+    # ArcGIS portals
+    - name: Run Script arcgis.py
+      run: python arcgis.py
+
+    # USMART portals
+    - name: Run Script py_USMART_import/Import_DCAT.ipynb
+      run: python py_USMART_import/Import_DCAT.ipynb
+
+    # CKAN portals
+    - name: Restore dependencies
+      run: dotnet restore ./CKANOpenDataImport/CKANOpenDataImport.csproj
+    - name: Build
+      run: dotnet build ./CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
+    - name: Run
+      working-directory: ${{ env.working-directory  }}
+      run: dotnet run
+    - name: Copy output to folder
+      run: cp ./CKANOpenDataImport/ckan_output.csv ./data/ckan_output.csv
+
+    # DCAT feeds
+    - name: Run Script dcat.py
+      run: python dcat.py
+
+    # Merge data
+    - name: Install dependencies for merge_data.py
+      run: python -m pip install pandas markdown pyyaml
+    - name: Run Script merge_data.py
+      run: python ./merge_data.py
+
+    # Convert merged CSV to Markdown files 
+    - name: Run Script export2jkan.py
+      run: python ./export2jkan.py
+
+    # Commit changes
+    # - name: Git config
+    #   run: |
+    #     git config user.name "GitHub Actions"
+    #     git config user.email "<>"
+    # - name: Git status
+    #   run: git status
+    # - name: Commit and push
+    #   run: git add -A && git commit -m "Dataset Pull Automatic Trigger" && git push origin main
