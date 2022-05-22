@@ -37,37 +37,42 @@ jobs:
         dotnet-version: 6.0.x
     
     # ArcGIS portals
-#     - name: Run Script arcgis.py
-#       run: python ${{env.odbodsPath}}/arcgis.py
+    - name: Run Script arcgis.py
+      run: python ${{env.odbodsPath}}/arcgis.py
+      working-directory: ${{env.odbodsPath}}
 
-#     # USMART portals
-#     - name: Run Script py_USMART_import/Import_DCAT.ipynb
-#       run: python ${{env.odbodsPath}}/py_USMART_import/Import_DCAT.ipynb
+    # USMART portals
+    - name: Run Script py_USMART_import/Import_DCAT.ipynb
+      run: python ${{env.odbodsPath}}/py_USMART_import/Import_DCAT.ipynb
+      working-directory: ${{env.odbodsPath}}/py_USMART_import
 
-#     # CKAN portals
-#     - name: Restore dependencies
-#       run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
-#     - name: Build
-#       run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
-#     - name: Run
-#       working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
-#       run: dotnet run
-#     - name: Copy output to folder
-#       run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
+    # CKAN portals
+    - name: Restore dependencies
+      run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
+    - name: Build
+      run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
+    - name: Run
+      working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
+      run: dotnet run
+    - name: Copy output to folder
+      run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
 
-#     # DCAT feeds
-#     - name: Run Script dcat.py
-#       run: python ${{env.odbodsPath}}/dcat.py
+    # DCAT feeds
+    - name: Run Script dcat.py
+      run: python ${{env.odbodsPath}}/dcat.py
+      working-directory: ${{env.odbodsPath}}
 
     # Merge data
     - name: Install dependencies for merge_data.py
       run: python -m pip install pandas markdown pyyaml
     - name: Run Script merge_data.py
       run: python ${{env.odbodsPath}}/merge_data.py
+      working-directory: ${{env.odbodsPath}}
 
     # Convert merged CSV to Markdown files 
     - name: Run Script export2jkan.py
       run: python ${{env.odbodsPath}}/export2jkan.py
+      working-directory: ${{env.odbodsPath}}
 
     # Commit changes
     # - name: Git config
