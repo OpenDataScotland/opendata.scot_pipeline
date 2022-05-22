@@ -65,6 +65,21 @@ jobs:
     - name: Run Script dcat.py
       run: python ./dcat.py
       working-directory: ${{env.odbodsPath}}
+      
+    # aberdeenshire_council_scraper feeds
+    - name: Run Script aberdeenshire_council_scraper.py
+      run: python ./aberdeenshire_council_scraper.py
+      working-directory: ${{env.odbodsPath}}/web-scrapers
+      
+    # east_ayrshire_scraper feeds
+    - name: Run Script east_ayrshire_scraper.py
+      run: python ./east_ayrshire_scraper.py
+      working-directory: ${{env.odbodsPath}}/web-scrapers
+      
+    # moray_council_scraper feeds
+    - name: Run Script moray_council_scraper.py
+      run: python ./moray_council_scraper.py
+      working-directory: ${{env.odbodsPath}}/web-scrapers
 
     # Merge data
     - name: Install dependencies for merge_data.py
