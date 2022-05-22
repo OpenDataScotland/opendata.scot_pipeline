@@ -48,15 +48,15 @@ jobs:
       working-directory: ${{env.odbodsPath}}
 
     # CKAN portals
-  #  - name: Restore dependencies
-   #   run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
-  #  - name: Build
-   #   run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
-  #  - name: Run
-  #    working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
-  #    run: dotnet run
-  #  - name: Copy output to folder
-  #    run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
+   - name: Restore dependencies
+     run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
+   - name: Build
+     run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
+   - name: Run
+     working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
+     run: dotnet run
+   - name: Copy output to folder
+     run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
 
     # DCAT feeds
     - name: Run Script dcat.py
