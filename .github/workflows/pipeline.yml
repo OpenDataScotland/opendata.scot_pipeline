@@ -7,6 +7,8 @@ jobs:
   Pull_datasets:
     runs-on: ubuntu-latest
     env: 
+      jkanPath: ./jkan
+      odbodsPath: ./the_od_bods
       
     steps:
     # Init repos
@@ -25,7 +27,7 @@ jobs:
 
 
    # Set up programming toolsets
-   - name: Set up Python 3.9
+    - name: Set up Python 3.9
       uses: actions/setup-python@v3
       with:
           python-version: '3.9'
@@ -36,36 +38,36 @@ jobs:
     
     # ArcGIS portals
     - name: Run Script arcgis.py
-      run: python arcgis.py
+      run: python ${{env.odbodsPath}}/arcgis.py
 
     # USMART portals
     - name: Run Script py_USMART_import/Import_DCAT.ipynb
-      run: python py_USMART_import/Import_DCAT.ipynb
+      run: python ${{env.odbodsPath}}/py_USMART_import/Import_DCAT.ipynb
 
     # CKAN portals
     - name: Restore dependencies
-      run: dotnet restore ./CKANOpenDataImport/CKANOpenDataImport.csproj
+      run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
     - name: Build
-      run: dotnet build ./CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
+      run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
     - name: Run
-      working-directory: ${{ env.working-directory  }}
+      working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
       run: dotnet run
     - name: Copy output to folder
-      run: cp ./CKANOpenDataImport/ckan_output.csv ./data/ckan_output.csv
+      run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
 
     # DCAT feeds
     - name: Run Script dcat.py
-      run: python dcat.py
+      run: python ${{env.odbodsPath}}/dcat.py
 
     # Merge data
     - name: Install dependencies for merge_data.py
       run: python -m pip install pandas markdown pyyaml
     - name: Run Script merge_data.py
-      run: python ./merge_data.py
+      run: python ${{env.odbodsPath}}/merge_data.py
 
     # Convert merged CSV to Markdown files 
     - name: Run Script export2jkan.py
-      run: python ./export2jkan.py
+      run: python ${{env.odbodsPath}}/export2jkan.py
 
     # Commit changes
     # - name: Git config
