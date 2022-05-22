@@ -83,5 +83,5 @@ jobs:
     - name: Git status
       run: git status
       working-directory: ${{env.jkanPath}}
-#     - name: Commit and push
-#       run: git add -A && git commit -m "Dataset Pull Automatic Trigger" && git push origin main
+    - name: Commit and push
+      run: git add -A && git commit -m "Dataset Sync" && git push origin gh-pages
