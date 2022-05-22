@@ -1,7 +1,10 @@
 name: Dataset Pull Automation
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 12 * * FRI'
 
 jobs:
   Pull_datasets:
