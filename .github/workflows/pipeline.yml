@@ -7,8 +7,8 @@ jobs:
   Pull_datasets:
     runs-on: ubuntu-latest
     env: 
-      jkanPath: ./jkan
-      odbodsPath: ./the_od_bods
+      jkanPath: jkan
+      odbodsPath: the_od_bods
       
     steps:
     # Init repos
@@ -37,27 +37,27 @@ jobs:
         dotnet-version: 6.0.x
     
     # ArcGIS portals
-    - name: Run Script arcgis.py
-      run: python ${{env.odbodsPath}}/arcgis.py
+#     - name: Run Script arcgis.py
+#       run: python ${{env.odbodsPath}}/arcgis.py
 
-    # USMART portals
-    - name: Run Script py_USMART_import/Import_DCAT.ipynb
-      run: python ${{env.odbodsPath}}/py_USMART_import/Import_DCAT.ipynb
+#     # USMART portals
+#     - name: Run Script py_USMART_import/Import_DCAT.ipynb
+#       run: python ${{env.odbodsPath}}/py_USMART_import/Import_DCAT.ipynb
 
-    # CKAN portals
-    - name: Restore dependencies
-      run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
-    - name: Build
-      run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
-    - name: Run
-      working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
-      run: dotnet run
-    - name: Copy output to folder
-      run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
+#     # CKAN portals
+#     - name: Restore dependencies
+#       run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
+#     - name: Build
+#       run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
+#     - name: Run
+#       working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
+#       run: dotnet run
+#     - name: Copy output to folder
+#       run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
 
-    # DCAT feeds
-    - name: Run Script dcat.py
-      run: python ${{env.odbodsPath}}/dcat.py
+#     # DCAT feeds
+#     - name: Run Script dcat.py
+#       run: python ${{env.odbodsPath}}/dcat.py
 
     # Merge data
     - name: Install dependencies for merge_data.py
