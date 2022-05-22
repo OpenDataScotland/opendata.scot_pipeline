@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  Pull datasets:
+  Pull_datasets:
     runs-on: ubuntu-latest
 
     steps:
