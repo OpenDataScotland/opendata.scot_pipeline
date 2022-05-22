@@ -87,11 +87,11 @@ jobs:
     #   run: git add -A && git commit -m "Dataset Sync" && git push origin gh-pages
     #   working-directory: ${{env.jkanPath}}
     - name: Pushes to JKAN
-      uses: cpina/github-action-push-to-another-repository@main
-      working-directory: ${{env.jkanPath}}
+      uses: cpina/github-action-push-to-another-repository@main      
       env:
         API_TOKEN_GITHUB: ${{ secrets.REPO_COMMIT_TOKEN }}
       with:
+        source-directory: ${{env.jkanPath}}
         destination-repository-username: 'OpenDataScotland'
         destination-repository-name: 'jkan'
         target-branch: 'gh-pages'
