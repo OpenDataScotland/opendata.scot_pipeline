@@ -43,7 +43,7 @@ jobs:
 
     # USMART portals
     - name: Run Script py_USMART_import/Import_DCAT.ipynb
-      run: python ./py_USMART_import/Import_DCAT.ipynb
+      run: python ./Import_DCAT.ipynb
       working-directory: ${{env.odbodsPath}}/py_USMART_import
 
     # CKAN portals
