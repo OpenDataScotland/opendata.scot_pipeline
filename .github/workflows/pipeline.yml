@@ -43,9 +43,9 @@ jobs:
       working-directory: ${{env.odbodsPath}}
 
     # USMART portals
-    - name: Run Script py_USMART_import/Import_DCAT.ipynb
-      run: python ./Import_DCAT.ipynb
-      working-directory: ${{env.odbodsPath}}/py_USMART_import
+    - name: Run Script usmart.py
+      run: python ./usmart.py
+      working-directory: ${{env.odbodsPath}}
 
     # CKAN portals
   #  - name: Restore dependencies
