@@ -38,12 +38,12 @@ jobs:
     
     # ArcGIS portals
     - name: Run Script arcgis.py
-      run: python ${{env.odbodsPath}}/arcgis.py
+      run: python arcgis.py
       working-directory: ${{env.odbodsPath}}
 
     # USMART portals
     - name: Run Script py_USMART_import/Import_DCAT.ipynb
-      run: python ${{env.odbodsPath}}/py_USMART_import/Import_DCAT.ipynb
+      run: python ./py_USMART_import/Import_DCAT.ipynb
       working-directory: ${{env.odbodsPath}}/py_USMART_import
 
     # CKAN portals
@@ -59,19 +59,19 @@ jobs:
 
     # DCAT feeds
     - name: Run Script dcat.py
-      run: python ${{env.odbodsPath}}/dcat.py
+      run: python ./dcat.py
       working-directory: ${{env.odbodsPath}}
 
     # Merge data
     - name: Install dependencies for merge_data.py
       run: python -m pip install pandas markdown pyyaml
     - name: Run Script merge_data.py
-      run: python ${{env.odbodsPath}}/merge_data.py
+      run: python ./merge_data.py
       working-directory: ${{env.odbodsPath}}
 
     # Convert merged CSV to Markdown files 
     - name: Run Script export2jkan.py
-      run: python ${{env.odbodsPath}}/export2jkan.py
+      run: python ./export2jkan.py
       working-directory: ${{env.odbodsPath}}
 
     # Commit changes
