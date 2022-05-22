@@ -35,6 +35,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
           python-version: '3.9'
+    - name: Install dependencies for python scripts
+      run: python -m pip install pandas markdown pyyaml beautifulsoup4 datefinder csv
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
@@ -82,8 +84,6 @@ jobs:
       working-directory: ${{env.odbodsPath}}/web-scrapers
 
     # Merge data
-    - name: Install dependencies for merge_data.py
-      run: python -m pip install pandas markdown pyyaml
     - name: Run Script merge_data.py
       run: python ./merge_data.py
       working-directory: ${{env.odbodsPath}}
