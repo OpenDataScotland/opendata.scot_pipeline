@@ -22,6 +22,7 @@ jobs:
       with: 
         repository: 'OpenDataScotland/jkan'
         path: 'jkan'
+        token: ${{ secrets.REPO_COMMIT_TOKEN }}
     - name: Check files
       run: ls -l -a
 
@@ -47,15 +48,15 @@ jobs:
       working-directory: ${{env.odbodsPath}}/py_USMART_import
 
     # CKAN portals
-    - name: Restore dependencies
-      run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
-    - name: Build
-      run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
-    - name: Run
-      working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
-      run: dotnet run
-    - name: Copy output to folder
-      run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
+  #  - name: Restore dependencies
+   #   run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
+  #  - name: Build
+   #   run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
+  #  - name: Run
+  #    working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
+  #    run: dotnet run
+  #  - name: Copy output to folder
+  #    run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
 
     # DCAT feeds
     - name: Run Script dcat.py
@@ -75,12 +76,11 @@ jobs:
       working-directory: ${{env.odbodsPath}}
 
     # Commit changes
-    - name: Git config
-      working-directory: ${{env.jkanPath}}
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "<>"
-        git remote set-url origin https://GitHubActions:${{ secrets.REPO_COMMIT_TOKEN }}@github.com/OpenDataScotland/jkan.git
+  #  - name: Git config
+  #    working-directory: ${{env.jkanPath}}
+  ##    run: |
+  #      git config user.name "GitHub Actions"
+  #      git config user.email "<>"
     - name: Git status
       run: git status
       working-directory: ${{env.jkanPath}}
