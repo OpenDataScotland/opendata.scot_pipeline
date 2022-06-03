@@ -106,4 +106,16 @@ jobs:
       run: git add -A && git commit -m "Dataset Sync" && git push origin gh-pages
       working-directory: ${{env.jkanPath}}
 
-
+    # Tell the Slack channel!
+    - name: Slack Notification
+      working-directory: ${{env.jkanPath}}
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      run: | COMMIT=$(git rev-parse HEAD)
+      curl --location --request POST ''$SLACK_WEBHOOK'' \
+      --header 'Content-Type: application/json' \
+      --data-raw '{"text": "I just did a sync! Check out the commit information here: https://github.com/OpenDataScotland/jkan/commit/'$COMMIT'",
+      "icon_url":"https://opendata.scot/img/ods_logo.png",
+      "username":"ODS sync bot"
+      }'
+        
