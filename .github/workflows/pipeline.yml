@@ -2,6 +2,12 @@ name: Dataset Pull Automation
 
 on:
   workflow_dispatch:
+    inputs:
+      notifySlack:
+        description: 'Notify Slack'
+        required: true
+        default: true
+        type: boolean
 
   schedule:
     - cron: '0 12 * * FRI'
@@ -108,6 +114,7 @@ jobs:
 
     # Tell the Slack channel!
     - name: Slack Notification
+      if: ${{ github.event.inputs.notifySlack == 'true' }} 
       working-directory: ${{env.jkanPath}}
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
