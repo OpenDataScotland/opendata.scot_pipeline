@@ -114,7 +114,7 @@ jobs:
 
     # Tell the Slack channel!
     - name: Slack Notification
-      if: ${{ github.event.inputs.notifySlack == 'true' }} 
+      if: ${{ github.event.inputs.notifySlack == 'true' || github.event.schedule == '0 12 * * FRI' }} 
       working-directory: ${{env.jkanPath}}
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
