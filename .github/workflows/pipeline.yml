@@ -31,7 +31,6 @@ jobs:
       with: 
         repository: 'OpenDataScotland/jkan'
         path: 'jkan'
-        token: ${{ secrets.REPO_COMMIT_TOKEN }}
     - name: Check files
       run: ls -l -a
 
@@ -89,6 +88,11 @@ jobs:
       run: python ./moray_council_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
 
+    # National Library of Scotland feeds
+    - name: Run Script nls_scraper.py
+      run: python ./nls_scraper.py
+      working-directory: ${{env.odbodsPath}}/web-scrapers
+
     # Merge data
     - name: Run Script merge_data.py
       run: python ./merge_data.py
@@ -124,6 +128,6 @@ jobs:
         --header 'Content-Type: application/json' \
         --data-raw '{"text": "I just did a sync!\nCheck out the commit information here: https://github.com/OpenDataScotland/jkan/commit/'$COMMIT'",
         "icon_url":"https://opendata.scot/img/ods_logo.png",
-        "username":"ODS sync bot"
+        "username":"ODS bot"
         }'
           
