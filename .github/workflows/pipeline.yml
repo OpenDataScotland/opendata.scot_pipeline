@@ -43,10 +43,11 @@ jobs:
           python-version: '3.9'
     - name: Install dependencies for python scripts
       run: python -m pip install pandas markdown pyyaml beautifulsoup4 datefinder requests
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
+      
+    #- name: Setup .NET
+    #  uses: actions/setup-dotnet@v2
+    #  with:
+    #    dotnet-version: 6.0.x
     
     # ArcGIS portals
     - name: Run Script arcgis.py
@@ -59,15 +60,19 @@ jobs:
       working-directory: ${{env.odbodsPath}}
 
     # CKAN portals
-    - name: Restore dependencies
-      run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
-    - name: Build
-      run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
-    - name: Run
-      working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
-      run: dotnet run
-    - name: Copy output to folder
-      run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
+    #- name: Restore dependencies
+    #  run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
+    #- name: Build
+    #  run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
+    #- name: Run
+    #  working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
+    #  run: dotnet run
+    #- name: Copy output to folder
+    #  run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
+     
+    - name: Run Script ckan.py
+      run: python ./ckan.py
+      working-directory: ${{env.odbodsPath}}    
 
     # DCAT feeds
     - name: Run Script dcat.py
