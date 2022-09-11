@@ -98,7 +98,13 @@ jobs:
     - name: Run Script nls_scraper.py
       run: python ./nls_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
-
+      
+    # Debugging: artifact upload
+    - uses: actions/upload-artifact@v3
+      with:
+        name: od_bods_repo
+        path: ${{env.odbodsPath}}
+        
     # Merge data
     - name: Run Script merge_data.py
       run: python ./merge_data.py
