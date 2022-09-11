@@ -72,7 +72,12 @@ jobs:
      
     - name: Run Script ckan.py
       run: python ./ckan.py
-      working-directory: ${{env.odbodsPath}}    
+      working-directory: ${{env.odbodsPath}}
+      
+    # ScotGov Statistics Sparkql
+    - name: Run Script sparkql_statistics.py
+      run: python ./sparkql_statistics.py
+      working-directory: ${{env.odbodsPath}}
 
     # DCAT feeds
     - name: Run Script dcat.py
@@ -98,11 +103,6 @@ jobs:
     - name: Run Script nls_scraper.py
       run: python ./nls_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
-      
-    # ScotGov Statistics Sparkql
-    - name: Run Script sparkql_statistics.py
-      run: python ./sparkql_statistics
-      working-directory: ${{env.odbodsPath}}
       
     # Debugging: artifact upload
     - uses: actions/upload-artifact@v3
