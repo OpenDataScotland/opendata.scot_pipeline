@@ -8,6 +8,11 @@ on:
         required: true
         default: true
         type: boolean
+      commitToSite:
+        description: 'Commit to opendata.scot'
+        required: true
+        default: true
+        type: boolean
 
   schedule:
     - cron: '0 12 * * FRI'
@@ -103,13 +108,7 @@ jobs:
     - name: Run Script nls_scraper.py
       run: python ./nls_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
-      
-    # Debugging: artifact upload
-    - uses: actions/upload-artifact@v3
-      with:
-        name: od_bods_repo
-        path: ${{env.odbodsPath}}
-        
+             
     # Merge data
     - name: Run Script merge_data.py
       run: python ./merge_data.py
@@ -130,6 +129,7 @@ jobs:
       run: git status
       working-directory: ${{env.jkanPath}}
     - name: Commit and push
+      if: ${{ github.event.inputs.commitToSite == 'true' || github.event.schedule == '0 12 * * FRI' }} 
       run: git add -A && git commit -m "Dataset Sync" && git push origin gh-pages
       working-directory: ${{env.jkanPath}}
 
@@ -147,4 +147,10 @@ jobs:
         "icon_url":"https://opendata.scot/img/ods_logo.png",
         "username":"ODS bot"
         }'
-          
+        
+    # Debugging: artifact upload if the workflow fails at all
+    - uses: actions/upload-artifact@v3
+      if: ${{ failure() }}
+      with:
+        name: od_bods_repo
+        path: ${{env.odbodsPath}}
