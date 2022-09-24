@@ -148,9 +148,9 @@ jobs:
         "username":"ODS bot"
         }'
         
-    # Debugging: artifact upload if the workflow fails at all
+    # Debugging: artifact upload if the workflow fails at all or if we're not committing to the site (likely to debug)
     - uses: actions/upload-artifact@v3
-      if: ${{ failure() }}
+      if: ${{ failure() || github.event.inputs.commitToSite == 'false' }}
       with:
-        name: od_bods_repo
-        path: ${{env.odbodsPath}}
+        name: workspace
+        path: ${{ github.workspace }}
