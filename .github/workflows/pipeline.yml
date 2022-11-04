@@ -51,8 +51,6 @@ jobs:
     # Set up log file
     - name: Set up log file
       run: | 
-        find log.json -type f -delete 2>/dev/null
-        find log.md -type f -delete 2>/dev/null
         touch log.json
         touch log.md
         echo '# pipeline error log' >> log.md
