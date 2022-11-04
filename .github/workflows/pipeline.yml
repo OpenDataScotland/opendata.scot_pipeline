@@ -59,6 +59,7 @@ jobs:
         echo '' >> log.md
         echo '|URL | Error Code | Error Reason|' >> log.md
         echo '|--- | --- | ---|' >> log.md
+      working-directory: ${{env.odbodsPath}}
     
     - name: Check files
       run: ls -l -a
