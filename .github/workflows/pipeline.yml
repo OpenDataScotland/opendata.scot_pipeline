@@ -40,7 +40,6 @@ jobs:
     - name: Check files
       run: ls -l -a
 
-
    # Set up programming toolsets
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
@@ -49,11 +48,23 @@ jobs:
     - name: Install dependencies for python scripts
       run: python -m pip install pandas markdown pyyaml beautifulsoup4 datefinder requests
       
-    #- name: Setup .NET
-    #  uses: actions/setup-dotnet@v2
-    #  with:
-    #    dotnet-version: 6.0.x
+    # Set up log file
+    - name: Set up log file
+      run: | 
+        find log.json -type f -delete
+        find log.md -type f -delete
+        touch log.json
+        touch log.md
+        echo '# pipeline error log' >> log.md
+        echo '' >> log.md
+        echo '## Unaccessible Webpages' >> log.md
+        echo '' >> log.md
+        echo '|URL | Error Code | Error Reason|' >> log.md
+        echo '|--- | --- | ---|' >> log.md
     
+    - name: Check files
+      run: ls -l -a
+        
     # ArcGIS portals
     - name: Run Script arcgis.py
       run: python arcgis.py
@@ -63,17 +74,6 @@ jobs:
     - name: Run Script usmart.py
       run: python ./usmart.py
       working-directory: ${{env.odbodsPath}}
-
-    # CKAN portals
-    #- name: Restore dependencies
-    #  run: dotnet restore ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj
-    #- name: Build
-    #  run: dotnet build ${{env.odbodsPath}}/CKANOpenDataImport/CKANOpenDataImport.csproj --no-restore
-    #- name: Run
-    #  working-directory: ${{env.odbodsPath}}/CKANOpenDataImport
-    #  run: dotnet run
-    #- name: Copy output to folder
-    #  run: cp ${{env.odbodsPath}}/CKANOpenDataImport/ckan_output.csv ${{env.odbodsPath}}/data/ckan_output.csv
      
     - name: Run Script ckan.py
       run: python ./ckan.py
@@ -154,3 +154,8 @@ jobs:
       with:
         name: workspace
         path: ${{ github.workspace }}
+        
+    # Log output
+    - name: Log output
+      run: echo '### Hello world! :rocket:' >> $GITHUB_STEP_SUMMARY
+
