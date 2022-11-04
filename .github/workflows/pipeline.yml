@@ -156,5 +156,6 @@ jobs:
         
     # Log output
     - name: Log output
-      run: echo '### Hello world! :rocket:' >> $GITHUB_STEP_SUMMARY
+      run: cat log.md >> $GITHUB_STEP_SUMMARY
+      working-directory: ${{env.odbodsPath}}
 
