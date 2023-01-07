@@ -31,6 +31,7 @@ jobs:
       with: 
         repository: 'OpenDataScotland/the_od_bods'
         path: 'the_od_bods'
+        token: ${{ secrets.REPO_COMMIT_TOKEN }}
     - name: Check out JKAN repo
       uses: actions/checkout@v3
       with: 
@@ -73,7 +74,7 @@ jobs:
     - name: Run Script usmart.py
       run: python ./usmart.py
       working-directory: ${{env.odbodsPath}}  
-      
+
     # - name: Run Script ckan.py
     #   run: python ./ckan.py
     #   working-directory: ${{env.odbodsPath}}
