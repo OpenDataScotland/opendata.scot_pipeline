@@ -75,9 +75,9 @@ jobs:
       run: python ./usmart.py
       working-directory: ${{env.odbodsPath}}  
 
-    # - name: Run Script ckan.py
-    #   run: python ./ckan.py
-    #   working-directory: ${{env.odbodsPath}}
+    - name: Run Script ckan.py
+      run: python ./ckan.py
+      working-directory: ${{env.odbodsPath}}
      
     # ScotGov Statistics Sparkql
     - name: Run Script sparkql_statistics.py
@@ -105,9 +105,9 @@ jobs:
       working-directory: ${{env.odbodsPath}}/web-scrapers
     
     # National Library of Scotland feeds
-    # - name: Run Script nls_scraper.py
-    #   run: python ./nls_scraper.py
-    #   working-directory: ${{env.odbodsPath}}/web-scrapers
+    - name: Run Script nls_scraper.py
+      run: python ./nls_scraper.py
+      working-directory: ${{env.odbodsPath}}/web-scrapers
        
     # Merge data
     - name: Run Script merge_data.py
@@ -120,18 +120,18 @@ jobs:
       working-directory: ${{env.odbodsPath}}
 
     # Commit changes
-    # - name: Git config JKAN
-    #   working-directory: ${{env.jkanPath}}
-    #   run: |
-    #     git config user.name 'GitHub Actions'
-    #     git config user.email '<>'
-    # - name: Git status JKAN
-    #   run: git status
-    #   working-directory: ${{env.jkanPath}}
-    # - name: Commit and push JKAN
-    #   if: ${{ github.event.inputs.commitToSite == 'true' || github.event.schedule == '0 12 * * FRI' }} 
-    #   run: git add -A && git commit -m 'Dataset Sync' && git push origin gh-pages
-    #   working-directory: ${{env.jkanPath}}
+    - name: Git config JKAN
+      working-directory: ${{env.jkanPath}}
+      run: |
+        git config user.name 'GitHub Actions'
+        git config user.email '<>'
+    - name: Git status JKAN
+      run: git status
+      working-directory: ${{env.jkanPath}}
+    - name: Commit and push JKAN
+      if: ${{ github.event.inputs.commitToSite == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+      run: git add -A && git commit -m 'Dataset Sync' && git push origin gh-pages
+      working-directory: ${{env.jkanPath}}
     - name: Git config the_od_bods
       working-directory: ${{env.odbodsPath}}
       run: |
