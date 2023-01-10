@@ -107,6 +107,11 @@ jobs:
     - name: Run Script nls_scraper.py
       run: python ./nls_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
+      
+    # Scottish Qualifications Authority feeds
+    - name: Run Script sqa_scraper.py
+      run: python ./sqa_scraper.py
+      working-directory: ${{env.odbodsPath}}/web-scrapers
              
     # Merge data
     - name: Run Script merge_data.py
