@@ -8,7 +8,7 @@ on:
         required: true
         default: true
         type: boolean
-      commitToSite:
+      commitToRepos:
         description: 'Commit to opendata.scot'
         required: true
         default: true
@@ -65,104 +65,99 @@ jobs:
     - name: Check files
       run: ls -l -a
         
-    # ArcGIS portals
-    - name: Run Script arcgis.py
-      run: python arcgis.py
-      working-directory: ${{env.odbodsPath}}
+    # # ArcGIS portals
+    # - name: Run Script arcgis.py
+    #   run: python arcgis.py
+    #   working-directory: ${{env.odbodsPath}}
 
     # USMART portals
     - name: Run Script usmart.py
       run: python ./usmart.py
       working-directory: ${{env.odbodsPath}}  
 
-    - name: Run Script ckan.py
-      run: python ./ckan.py
-      working-directory: ${{env.odbodsPath}}
+    # - name: Run Script ckan.py
+    #   run: python ./ckan.py
+    #   working-directory: ${{env.odbodsPath}}
      
-    # ScotGov Statistics Sparkql
-    - name: Run Script sparkql_statistics.py
-      run: python ./sparkql_statistics.py
-      working-directory: ${{env.odbodsPath}}
+    # # ScotGov Statistics Sparkql
+    # - name: Run Script sparkql_statistics.py
+    #   run: python ./sparkql_statistics.py
+    #   working-directory: ${{env.odbodsPath}}
 
-    # DCAT feeds
-    - name: Run Script dcat.py
-      run: python ./dcat.py
-      working-directory: ${{env.odbodsPath}}
+    # # DCAT feeds
+    # - name: Run Script dcat.py
+    #   run: python ./dcat.py
+    #   working-directory: ${{env.odbodsPath}}
       
-    # aberdeenshire_council_scraper feeds
-    - name: Run Script aberdeenshire_council_scraper.py
-      run: python ./aberdeenshire_council_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
+    # # aberdeenshire_council_scraper feeds
+    # - name: Run Script aberdeenshire_council_scraper.py
+    #   run: python ./aberdeenshire_council_scraper.py
+    #   working-directory: ${{env.odbodsPath}}/web-scrapers
       
-    # east_ayrshire_scraper feeds
-    - name: Run Script east_ayrshire_scraper.py
-      run: python ./east_ayrshire_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
+    # # east_ayrshire_scraper feeds
+    # - name: Run Script east_ayrshire_scraper.py
+    #   run: python ./east_ayrshire_scraper.py
+    #   working-directory: ${{env.odbodsPath}}/web-scrapers
       
-    # moray_council_scraper feeds
-    - name: Run Script moray_council_scraper.py
-      run: python ./moray_council_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
+    # # moray_council_scraper feeds
+    # - name: Run Script moray_council_scraper.py
+    #   run: python ./moray_council_scraper.py
+    #   working-directory: ${{env.odbodsPath}}/web-scrapers
     
-    # National Library of Scotland feeds
-    - name: Run Script nls_scraper.py
-      run: python ./nls_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
+    # # National Library of Scotland feeds
+    # - name: Run Script nls_scraper.py
+    #   run: python ./nls_scraper.py
+    #   working-directory: ${{env.odbodsPath}}/web-scrapers
        
     # Merge data
     - name: Run Script merge_data.py
       run: python ./merge_data.py
       working-directory: ${{env.odbodsPath}}
 
-    # Convert merged CSV to Markdown files 
-    - name: Run Script export2jkan.py
-      run: python ./export2jkan.py
-      working-directory: ${{env.odbodsPath}}
+    # # Convert merged CSV to Markdown files 
+    # - name: Run Script export2jkan.py
+    #   run: python ./export2jkan.py
+    #   working-directory: ${{env.odbodsPath}}
 
     # Commit changes
-    - name: Git config JKAN
+    - name: Git config
       working-directory: ${{env.jkanPath}}
       run: |
-        git config user.name 'GitHub Actions'
-        git config user.email '<>'
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     - name: Git status JKAN
       run: git status
       working-directory: ${{env.jkanPath}}
-    - name: Commit and push JKAN
-      if: ${{ github.event.inputs.commitToSite == 'true' || github.event.schedule == '0 12 * * FRI' }} 
-      run: git add -A && git commit -m 'Dataset Sync' && git push origin gh-pages
-      working-directory: ${{env.jkanPath}}
-    - name: Git config the_od_bods
-      working-directory: ${{env.odbodsPath}}
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "<>"
+    # - name: Commit and push JKAN
+    #   if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+    #   run: git add -A && git commit -m 'Dataset Sync' && git push origin gh-pages
+    #   working-directory: ${{env.jkanPath}}
     - name: Git status the_od_bods
       run: git status
       working-directory: ${{env.odbodsPath}}
     - name: Commit and push the_od_bods
-      if: ${{ github.event.inputs.commitToSite == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+      if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
       run: git add data && git commit -m "Dataset Sync" && git push origin main
       working-directory: ${{env.odbodsPath}}
 
-    # Tell the Slack channel!
-    - name: Slack Notification
-      if: ${{ github.event.inputs.notifySlack == 'true' || github.event.schedule == '0 12 * * FRI' }} 
-      working-directory: ${{env.jkanPath}}
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      run: | 
-        COMMIT=$(git rev-parse HEAD)
-        curl --location --request POST ''$SLACK_WEBHOOK'' \
-        --header 'Content-Type: application/json' \
-        --data-raw '{"text": "I just did a sync!\nCheck out the commit information here: https://github.com/OpenDataScotland/jkan/commit/'$COMMIT'",
-        "icon_url":"https://opendata.scot/img/ods_logo.png",
-        "username":"ODS bot"
-        }'
+    ## Tell the Slack channel!
+    # - name: Slack Notification
+    #   if: ${{ github.event.inputs.notifySlack == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+    #   working-directory: ${{env.jkanPath}}
+    #   env:
+    #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    #   run: | 
+    #     COMMIT=$(git rev-parse HEAD)
+    #     curl --location --request POST ''$SLACK_WEBHOOK'' \
+    #     --header 'Content-Type: application/json' \
+    #     --data-raw '{"text": "I just did a sync!\nCheck out the commit information here: https://github.com/OpenDataScotland/jkan/commit/'$COMMIT'",
+    #     "icon_url":"https://opendata.scot/img/ods_logo.png",
+    #     "username":"ODS bot"
+    #     }'
         
     # Debugging: artifact upload if the workflow fails at all or if we're not committing to the site (likely to debug)
     - uses: actions/upload-artifact@v3
-      if: ${{ failure() || github.event.inputs.commitToSite == 'false' }}
+      if: ${{ failure() || github.event.inputs.commitToRepos == 'false' }}
       with:
         name: workspace
         path: ${{ github.workspace }}
