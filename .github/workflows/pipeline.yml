@@ -8,7 +8,7 @@ on:
         required: true
         default: true
         type: boolean
-      commitToSite:
+      commitToRepos:
         description: 'Commit to opendata.scot'
         required: true
         default: true
@@ -31,6 +31,7 @@ jobs:
       with: 
         repository: 'OpenDataScotland/the_od_bods'
         path: 'the_od_bods'
+        token: ${{ secrets.REPO_COMMIT_TOKEN }}
     - name: Check out JKAN repo
       uses: actions/checkout@v3
       with: 
@@ -72,12 +73,12 @@ jobs:
     # USMART portals
     - name: Run Script usmart.py
       run: python ./usmart.py
-      working-directory: ${{env.odbodsPath}}
-     
+      working-directory: ${{env.odbodsPath}}  
+
     - name: Run Script ckan.py
       run: python ./ckan.py
       working-directory: ${{env.odbodsPath}}
-      
+     
     # ScotGov Statistics Sparkql
     - name: Run Script sparkql_statistics.py
       run: python ./sparkql_statistics.py
@@ -102,17 +103,17 @@ jobs:
     - name: Run Script moray_council_scraper.py
       run: python ./moray_council_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
-
+    
     # National Library of Scotland feeds
     - name: Run Script nls_scraper.py
       run: python ./nls_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
-      
+
     # Scottish Qualifications Authority feeds
     - name: Run Script sqa_scraper.py
       run: python ./sqa_scraper.py
       working-directory: ${{env.odbodsPath}}/web-scrapers
-             
+
     # Merge data
     - name: Run Script merge_data.py
       run: python ./merge_data.py
@@ -127,15 +128,22 @@ jobs:
     - name: Git config
       working-directory: ${{env.jkanPath}}
       run: |
-        git config user.name "GitHub Actions"
-        git config user.email "<>"
-    - name: Git status
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    - name: Git status JKAN
       run: git status
       working-directory: ${{env.jkanPath}}
-    - name: Commit and push
-      if: ${{ github.event.inputs.commitToSite == 'true' || github.event.schedule == '0 12 * * FRI' }} 
-      run: git add -A && git commit -m "Dataset Sync" && git push origin gh-pages
+    - name: Commit and push JKAN
+      if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+      run: git add -A && git commit -m 'Dataset Sync' && git push origin gh-pages
       working-directory: ${{env.jkanPath}}
+    - name: Git status the_od_bods
+      run: git status
+      working-directory: ${{env.odbodsPath}}
+    - name: Commit and push the_od_bods
+      if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
+      run: git add data && git commit -m "Dataset Sync" && git push origin main
+      working-directory: ${{env.odbodsPath}}
 
     # Tell the Slack channel!
     - name: Slack Notification
@@ -154,7 +162,7 @@ jobs:
         
     # Debugging: artifact upload if the workflow fails at all or if we're not committing to the site (likely to debug)
     - uses: actions/upload-artifact@v3
-      if: ${{ failure() || github.event.inputs.commitToSite == 'false' }}
+      if: ${{ failure() || github.event.inputs.commitToRepos == 'false' }}
       with:
         name: workspace
         path: ${{ github.workspace }}
