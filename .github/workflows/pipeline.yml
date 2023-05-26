@@ -46,11 +46,11 @@ jobs:
       uses: actions/setup-python@v3
       with:
           python-version: '3.9'
-    - name: Set up Python toolsets
-      run: sudo apt-get install python3.9-dev pkg-config libcairo2-dev
+    # - name: Set up Python toolsets
+    #   run: sudo apt-get install python3.9-dev pkg-config libcairo2-dev
 
-    # - name: Install dependencies for python scripts
-    #   run: python -m pip install pandas markdown pyyaml beautifulsoup4 datefinder requests loguru
+    - name: Install dependencies for python scripts
+      run: python -m pip install pandas markdown pyyaml beautifulsoup4 datefinder requests loguru
       
     # Set up log file
     - name: Set up log file
