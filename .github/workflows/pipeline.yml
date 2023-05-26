@@ -65,63 +65,9 @@ jobs:
     - name: Check files
       run: ls -l -a
         
-    # ArcGIS portals
-    - name: Run Script arcgis.py
-      run: python arcgis.py
-      working-directory: ${{env.odbodsPath}}
-
-    # USMART portals
-    - name: Run Script usmart.py
-      run: python ./usmart.py
-      working-directory: ${{env.odbodsPath}}  
-
-    - name: Run Script ckan.py
-      run: python ./ckan.py
-      working-directory: ${{env.odbodsPath}}
-     
-    # ScotGov Statistics Sparkql
-    - name: Run Script sparkql_statistics.py
-      run: python ./sparkql_statistics.py
-      working-directory: ${{env.odbodsPath}}
-
-    # DCAT feeds
-    - name: Run Script dcat.py
-      run: python ./dcat.py
-      working-directory: ${{env.odbodsPath}}
-      
-    # aberdeenshire_council_scraper feeds
-    - name: Run Script aberdeenshire_council_scraper.py
-      run: python ./aberdeenshire_council_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-      
-    # east_ayrshire_scraper feeds
-    - name: Run Script east_ayrshire_scraper.py
-      run: python ./east_ayrshire_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-      
-    # moray_council_scraper feeds
-    - name: Run Script moray_council_scraper.py
-      run: python ./moray_council_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-    
-    # National Library of Scotland feeds
-    - name: Run Script nls_scraper.py
-      run: python ./nls_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-
-    # Scottish Qualifications Authority feeds
-    - name: Run Script sqa_scraper.py
-      run: python ./sqa_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-
-    # Merge data
-    - name: Run Script merge_data.py
-      run: python ./merge_data.py
-      working-directory: ${{env.odbodsPath}}
-
-    # Convert merged CSV to Markdown files 
-    - name: Run Script export2jkan.py
-      run: python ./export2jkan.py
+    # Run main.py
+    - name: Run Script main.py
+      run: python main.py
       working-directory: ${{env.odbodsPath}}
 
     # Commit changes
