@@ -75,11 +75,13 @@ jobs:
 
     # Merge data
     - name: Run Script merge_data.py
+      if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
       run: python ./merge_data.py
       working-directory: ${{env.odbodsPath}}
 
     # Convert merged CSV to Markdown files 
     - name: Run Script export2jkan.py
+      if: ${{ github.event.inputs.commitToRepos == 'true' || github.event.schedule == '0 12 * * FRI' }} 
       run: python ./export2jkan.py
       working-directory: ${{env.odbodsPath}}
 
