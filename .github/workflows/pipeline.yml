@@ -88,7 +88,7 @@ jobs:
     - name: Build and run docker container
       run: |
         docker build -t open_data_scotland_pipeline .
-        docker run -it --name ods_pipeline open_data_scotland_pipeline
+        docker run -t --name ods_pipeline open_data_scotland_pipeline
       working-directory: ${{env.odbodsPath}}
 
     - name: Copy container contents and overwrite datasets
