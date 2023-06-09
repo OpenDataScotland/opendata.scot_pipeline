@@ -38,91 +38,19 @@ jobs:
         repository: 'OpenDataScotland/jkan'
         path: 'jkan'
         token: ${{ secrets.REPO_COMMIT_TOKEN }}
-    - name: Check files
-      run: ls -l -a
 
-   # Set up programming toolsets
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v3
-      with:
-          python-version: '3.9'
-    - name: Install dependencies for python scripts
-      run: python -m pip install pandas markdown pyyaml beautifulsoup4 datefinder requests
-      
-    # Set up log file
-    - name: Set up log file
-      run: | 
-        touch log.json
-        touch log.md
-        echo '# pipeline error log' >> log.md
-        echo '' >> log.md
-        echo '## Unaccessible Webpages' >> log.md
-        echo '' >> log.md
-        echo '|URL | Error Code | Error Reason|' >> log.md
-        echo '|--- | --- | ---|' >> log.md
-      working-directory: ${{env.odbodsPath}}
-    
-    - name: Check files
-      run: ls -l -a
-        
-    # ArcGIS portals
-    - name: Run Script arcgis.py
-      run: python arcgis.py
+    # Run pipeline
+    - name: Build and run docker container
+      run: |
+        docker build -t open_data_scotland_pipeline .
+        docker run -t --name ods_pipeline open_data_scotland_pipeline
       working-directory: ${{env.odbodsPath}}
 
-    # USMART portals
-    - name: Run Script usmart.py
-      run: python ./usmart.py
-      working-directory: ${{env.odbodsPath}}  
-
-    - name: Run Script ckan.py
-      run: python ./ckan.py
-      working-directory: ${{env.odbodsPath}}
-     
-    # ScotGov Statistics Sparkql
-    - name: Run Script sparkql_statistics.py
-      run: python ./sparkql_statistics.py
-      working-directory: ${{env.odbodsPath}}
-
-    # DCAT feeds
-    - name: Run Script dcat.py
-      run: python ./dcat.py
-      working-directory: ${{env.odbodsPath}}
-      
-    # aberdeenshire_council_scraper feeds
-    - name: Run Script aberdeenshire_council_scraper.py
-      run: python ./aberdeenshire_council_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-      
-    # east_ayrshire_scraper feeds
-    - name: Run Script east_ayrshire_scraper.py
-      run: python ./east_ayrshire_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-      
-    # moray_council_scraper feeds
-    - name: Run Script moray_council_scraper.py
-      run: python ./moray_council_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-    
-    # National Library of Scotland feeds
-    - name: Run Script nls_scraper.py
-      run: python ./nls_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-
-    # Scottish Qualifications Authority feeds
-    - name: Run Script sqa_scraper.py
-      run: python ./sqa_scraper.py
-      working-directory: ${{env.odbodsPath}}/web-scrapers
-
-    # Merge data
-    - name: Run Script merge_data.py
-      run: python ./merge_data.py
-      working-directory: ${{env.odbodsPath}}
-
-    # Convert merged CSV to Markdown files 
-    - name: Run Script export2jkan.py
-      run: python ./export2jkan.py
-      working-directory: ${{env.odbodsPath}}
+    # Extract files from Docker container
+    - name: Copy container contents and overwrite datasets
+      run: |
+        rm -r jkan/_datasets/*
+        docker cp ods_pipeline:./usr/src/app/. .
 
     # Commit changes
     - name: Git config
