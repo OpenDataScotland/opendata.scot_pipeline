@@ -50,6 +50,7 @@ jobs:
     - name: Copy container contents and overwrite datasets
       run: |
         rm -r jkan/_datasets/*
+        rm -r the_od_bods/data/*
         docker cp ods_pipeline:./usr/src/app/. .
 
     # Commit changes
